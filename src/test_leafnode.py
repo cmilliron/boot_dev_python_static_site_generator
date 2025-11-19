@@ -37,7 +37,7 @@ class TestLeafNode(unittest.TestCase):
 
     def test_repr(self):
         node = LeafNode("p", "Hello", {"class": "x"})
-        expected = "HTMLNode(p, Hello, None, {'class': 'x'})"
+        expected = "LeafNode(p, Hello, {'class': 'x'})"
         self.assertEqual(repr(node), expected)
 
 
