@@ -1,2 +1,2 @@
-# boot_dev_python_static_site_generator
+# Python Static Site Generator
 Boot.dev project to create a python static site generator. 
