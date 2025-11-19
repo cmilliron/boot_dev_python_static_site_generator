@@ -35,8 +35,35 @@ class LeafNode(HTMLNode):
          return f"LeafNode({self.tag}, {self.value}, {self.props})"
 
 
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props=None):
+        super().__init__(tag=tag, value=None, children=children, props=props)
+    
+    def to_html(self):
+        if self.tag == None:
+            raise ValueError("Invalid HTML: no tag given")
+        if self.children is None:
+            raise ValueError("Invalid HTML: no children given")
+        output = f"<{self.tag}{self.props_to_html()}>"
+        for node in self.children:
+            output += node.to_html()
+        output += f"</{self.tag}>"
+        return output
+
+
+    def __repr__(self):
+         return f"LeafNode({self.tag}, {self.value}, {self.props})"
+
+
 if __name__ == "__main__":
-    node = LeafNode("p", "Hello, world!")
+    node = ParentNode(
+    "p",
+    [
+        LeafNode("b", "Bold text"),
+        LeafNode(None, "Normal text"),
+        LeafNode("i", "italic text"),
+        LeafNode(None, "Normal text"),
+    ],
+)
     print(node.to_html())
-    node2 = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
-    print(node2.to_html())
+
