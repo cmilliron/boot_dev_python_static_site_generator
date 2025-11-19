@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode   # adjust import if needed
+from htmlnode import HTMLNode, LeafNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -64,6 +64,10 @@ class TestHTMLNode(unittest.TestCase):
     def test_value_assignment(self):
         node = HTMLNode("p", "Hello")
         self.assertEqual(node.value, "Hello")
+    
+    def test_leaf_to_html_p(self):
+        node = LeafNode("p", "Hello, world!")
+        self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
 
 
 if __name__ == "__main__":
