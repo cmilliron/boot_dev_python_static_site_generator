@@ -17,4 +17,4 @@ def text_node_to_html_node(text_node):
         case TextType.IMAGE:
             return LeafNode("img", "", props={'src': text_node.url, "alt": text_node.text})
         case _:
-            raise Exception("no valid text type")
+            raise ValueError(f"invalid text type: {text_node.text_type}")
