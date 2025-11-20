@@ -2,7 +2,7 @@ import unittest
 from htmlnode import HTMLNode, LeafNode
 from textnode import TextNode, TextType
 from textnode_to_htmlnode import text_node_to_html_node
-from split_node_delimiter import split_nodes_delimiter
+from inline_helper_functions import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 
 class TestTextToHTMLNODE(unittest.TestCase):
 
@@ -154,14 +154,43 @@ class TestMarkdownInlineDelimiter(unittest.TestCase):
 
     # Testing Exceptions
     def test_bad_mardown_exception(self):
-        print("\nTesting bad markdon exeption....")
+        print("\nTesting bad markdone exeption....")
         with self.assertRaises(Exception) as e:
             node = TextNode("This is the wrong way to **bold something in markdown", TextType.TEXT)
             response = split_nodes_delimiter([node], "**", TextType.BOLD)
         print(f"Exception: {str(e.exception)}")
-    
 
-# node = TextNode("This is text with a `code block` word", TextType.TEXT)
+class TestLinkAndImageExtraction(unittest.TestCase):    
+    def test_extract_markdown_images(self):
+        print("\nTesting for markdown image extraction with one image....")
+        matches = extract_markdown_images(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+        )
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+    
+    def test_extract_markdown_multiple_images(self):
+        print("\nTesting for markdown image extraction with one image....")
+        matches = extract_markdown_images(
+            "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        )
+        self.assertListEqual([("rick roll", "https://i.imgur.com/aKaOqIh.gif"), ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")], matches)
+
+    def test_extract_markdown_link(self):
+        print("\nTesting for markdown link extraction with one link....")
+        matches = extract_markdown_links(
+            "This is text with an [Google](https://google.com)"
+        )
+        print(matches)
+        self.assertListEqual([("Google", "https://google.com")], matches)
+
+    def test_extract_markdown_multiple_links(self):
+        print("\nTesting for multiple markdown link extraction with one link....")
+        matches = extract_markdown_links(
+            "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        )
+        print(matches)
+        self.assertListEqual([("to boot dev", "https://www.boot.dev"), ("to youtube", "https://www.youtube.com/@bootdotdev")], matches)
+    
 
 if __name__ == "__main__":
     unittest.main()

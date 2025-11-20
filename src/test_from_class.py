@@ -2,7 +2,7 @@ import unittest
 from htmlnode import LeafNode, ParentNode, HTMLNode
 from textnode import TextNode, TextType
 from textnode_to_htmlnode import text_node_to_html_node
-from split_node_delimiter import split_nodes_delimiter
+from inline_helper_functions import split_nodes_delimiter
 
 
 
