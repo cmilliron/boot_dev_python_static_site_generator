@@ -13,5 +13,6 @@ def text_to_textnodes(text):
     
 
 if __name__ == "__main__":
+    # For testing 
     text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
     print("OUTPUT:\n", text_to_textnodes(text))
