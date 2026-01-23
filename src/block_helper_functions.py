@@ -4,7 +4,7 @@ from rich import print
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n\n")
     processed_blocks = [item.strip() for item in blocks]
-    cleaned_blocks = [item for item in processed_blocks if len(item) >0]
+    cleaned_blocks = [item for item in processed_blocks if len(item) > 0]
     return cleaned_blocks
 
 
