@@ -4,6 +4,7 @@ from textnode import TextNode, TextType
 from textnode_to_htmlnode import text_node_to_html_node
 from inline_helper_functions import split_nodes_delimiter, extract_markdown_links, extract_markdown_images, split_nodes_image, split_nodes_link
 from text_to_node import text_to_textnodes
+from block_helper_functions import markdown_to_blocks
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -909,6 +910,59 @@ class TestTextDifferentNode(unittest.TestCase):
     def test_enum_value(self):
         self.assertEqual(TextType.ITALIC.value, "italic")
 
+
+class TestBlockHelperFunctions(unittest.TestCase):
+    def test_markdown_to_blocks(self):
+        md = """
+This is **bolded** paragraph
+
+This is another paragraph with _italic_ text and `code` here
+This is the same paragraph on a new line
+
+- This is a list
+- with items
+"""
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(
+            blocks,
+            [
+                "This is **bolded** paragraph",
+                "This is another paragraph with _italic_ text and `code` here\nThis is the same paragraph on a new line",
+                "- This is a list\n- with items",
+            ],
+        )
+    
+    def test_basic_split(self):
+        # Test 1: Simple case with two distinct blocks
+        md = "This is a heading\n\nThis is a paragraph."
+        expected = ["This is a heading", "This is a paragraph."]
+        self.assertEqual(markdown_to_blocks(md), expected)
+
+    def test_whitespace_stripping(self):
+        # Test 2: Blocks with leading/trailing spaces and tabs
+        md = "   Block one with spaces   \n\n   Block two with tabs\t"
+        expected = ["Block one with spaces", "Block two with tabs"]
+        self.assertEqual(markdown_to_blocks(md), expected)
+
+    def test_multiple_newlines(self):
+        # Test 3: Handling more than two newlines between blocks
+        md = "Block one\n\n\n\nBlock two"
+        # My updated version filters empty strings, otherwise this would return ['Block one', '', 'Block two']
+        expected = ["Block one", "Block two"]
+        self.assertEqual(markdown_to_blocks(md), expected)
+
+    def test_single_newline_preservation(self):
+        # Test 4: Single newlines should NOT split blocks (like a list)
+        md = "List item 1\nList item 2\n\nParagraph 2"
+        expected = ["List item 1\nList item 2", "Paragraph 2"]
+        self.assertEqual(markdown_to_blocks(md), expected)
+
+    def test_trailing_newlines_at_eof(self):
+        # Test 5: Markdown file ending with several newlines
+        md = "Only one block\n\n\n"
+        expected = ["Only one block"]
+        self.assertEqual(markdown_to_blocks(md), expected)
+
+
 if __name__ == "__main__":
-    print("from class")
     unittest.main()
