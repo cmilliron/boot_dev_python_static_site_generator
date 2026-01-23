@@ -4,7 +4,7 @@ from textnode import TextNode, TextType
 from textnode_to_htmlnode import text_node_to_html_node
 from inline_helper_functions import split_nodes_delimiter, extract_markdown_links, extract_markdown_images, split_nodes_image, split_nodes_link
 from text_to_node import text_to_textnodes
-from block_helper_functions import markdown_to_blocks
+from block_helper_functions import markdown_to_blocks, BlockType, block_to_block_type
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -962,6 +962,48 @@ This is the same paragraph on a new line
         md = "Only one block\n\n\n"
         expected = ["Only one block"]
         self.assertEqual(markdown_to_blocks(md), expected)
+
+
+class TestBlockToBlockType(unittest.TestCase):
+
+    def test_block_to_block_type_heading(self):
+        # Test 1: Standard H1 and H6
+        block = "# This is a heading"
+        self.assertEqual(block_to_block_type(block), BlockType.HEADING)
+        block = "###### This is a small heading"
+        self.assertEqual(block_to_block_type(block), BlockType.HEADING)
+
+    def test_block_to_block_type_code(self):
+        # Test 2: Code block start
+        block = "```\nprint('hello')\n```"
+        self.assertEqual(block_to_block_type(block), BlockType.CODE)
+
+    def test_block_to_block_type_quote(self):
+        # Test 3: Multi-line quote (Note: change your code to '>' for Markdown)
+        block = "> This is a quote\n> second line"
+        # If your code currently uses '<', this test will fail until you update the code
+        self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
+
+    def test_block_to_block_type_ul(self):
+        # Test 4: Unordered list
+        block = "- item 1\n- item 2"
+        self.assertEqual(block_to_block_type(block), BlockType.UNORDERED_LIST)
+
+    def test_block_to_block_type_ol(self):
+        # Test 5: Ordered list logic (0. item, 1. item...)
+        block = "0. first\n1. second"
+        self.assertEqual(block_to_block_type(block), BlockType.ORDERED_LIST)
+
+    def test_block_to_block_type_paragraph(self):
+        # Test 6: Normal text
+        block = "This is just a normal paragraph of text."
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
+
+    def test_header_false_positive(self):
+        # Test 7: Ensure text starting with # but no space (or just text) isn't necessarily a header
+        # Note: Your current function would return True here. Usually headers need a space.
+        block = "Check out this #hashtag"
+        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
 
 if __name__ == "__main__":
