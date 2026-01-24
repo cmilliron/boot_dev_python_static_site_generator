@@ -11,12 +11,7 @@ class BlockType(Enum):
 
 
 def block_is_header(block):
-    if block.startswith('#') or \
-        block.startswith('##') or \
-        block.startswith('###') or \
-        block.startswith('####') or \
-        block.startswith('#####') or \
-        block.startswith('######'):
+    if block.startswith(("# ", "## ", "### ", "#### ", "##### ", "###### ")):
         return True
     else:
         return False
