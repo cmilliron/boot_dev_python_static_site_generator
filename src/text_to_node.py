@@ -1,5 +1,5 @@
 from inline_helper_functions import split_nodes_delimiter, split_nodes_image, split_nodes_link
-from textnode import TextNode, TextType
+from node_type_text import TextNode, TextType
 
 
 def text_to_textnodes(text):

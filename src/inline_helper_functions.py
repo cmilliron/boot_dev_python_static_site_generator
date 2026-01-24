@@ -1,4 +1,4 @@
-from textnode import TextNode, TextType
+from node_type_text import TextNode, TextType
 import re
 
 
@@ -21,6 +21,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     processed_node_list.append(TextNode(item, TextType.TEXT))
         new_nodes.extend(processed_node_list)
     return new_nodes
+
 
 def process_image_node(node):
     images = extract_markdown_images(node.text)
@@ -69,7 +70,6 @@ def process_link_node(node):
     links = extract_markdown_links(node.text)
     if node.text_type != TextType.TEXT or len(links) == 0:
         return [node]
-
     current_link_text = links[0][0]
     current_link_link = links[0][1]
     link_split = node.text.split(f"[{current_link_text}]({current_link_link})")
@@ -117,6 +117,7 @@ def extract_markdown_images(text):
     raw_image_data = re.findall(r_expression, text)
     clean_images = [(image[0], image[1]) for image in raw_image_data]
     return clean_images
+
 
 def extract_markdown_links(text):
     # r_expression = r"(?<!!)\[(.*?)\]\((https:\/\/.*?)\)"

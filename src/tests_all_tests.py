@@ -1,6 +1,6 @@
 import unittest
-from htmlnode import LeafNode, ParentNode, HTMLNode
-from textnode import TextNode, TextType
+from node_type_html import LeafNode, ParentNode, HTMLNode
+from node_type_text import TextNode, TextType
 from textnode_to_htmlnode import text_node_to_html_node
 from inline_helper_functions import split_nodes_delimiter, extract_markdown_links, extract_markdown_images, split_nodes_image, split_nodes_link
 from text_to_node import text_to_textnodes
@@ -965,7 +965,6 @@ This is the same paragraph on a new line
 
 
 class TestBlockToBlockType(unittest.TestCase):
-
     def test_block_to_block_type_heading(self):
         # Test 1: Standard H1 and H6
         block = "# This is a heading"

@@ -1,8 +1,7 @@
-from textnode import TextNode, TextType
-from htmlnode import LeafNode
+from node_type_text import TextNode, TextType
+from node_type_html import LeafNode
 
 def text_node_to_html_node(text_node):
-
     match text_node.text_type:
         case TextType.TEXT:
             return LeafNode(None, text_node.text)

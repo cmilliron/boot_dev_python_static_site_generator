@@ -1,6 +1,7 @@
 from rich import print
 from enum import Enum
 
+
 class BlockType(Enum):
     PARAGRAPH = "paragraph"
     HEADING = "heading"
@@ -66,6 +67,17 @@ def markdown_to_blocks(markdown):
     processed_blocks = [item.strip() for item in blocks]
     cleaned_blocks = [item for item in processed_blocks if len(item) > 0]
     return cleaned_blocks
+
+
+def text_to_children(text):
+    pass
+
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        blocktype = block_to_block_type(block)
+
 
 
 if __name__ == "__main__":
