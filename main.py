@@ -1,3 +1,6 @@
+import shutil, os
+
+
 def main():
     print("Hello from boot-dev-python-static-site-generator!")
 
