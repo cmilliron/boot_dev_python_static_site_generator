@@ -5,7 +5,7 @@ from textnode_to_htmlnode import text_node_to_html_node
 from inline_helper_functions import split_nodes_delimiter, extract_markdown_links, extract_markdown_images, split_nodes_image, split_nodes_link
 from text_to_node import text_to_textnodes
 from block_helper_functions import markdown_to_blocks, BlockType, block_to_block_type, markdown_to_html_node
-
+from markdown_to_html import extract_title
 
 class TestHTMLNode(unittest.TestCase):
     def test_to_html_props(self):
@@ -1192,6 +1192,40 @@ the **same** even with inline stuff
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
 
+class TestExtractTitle(unittest.TestCase):
+
+    def test_standard_header(self):
+        """Should extract a standard H1 header."""
+        md = "# Hello World"
+        self.assertEqual(extract_title(md), "Hello World")
+
+    def test_header_with_multiple_lines(self):
+        """Should find the H1 even if it's not on the first line."""
+        md = "Some intro text\n\n# The Real Title\nMore text here."
+        self.assertEqual(extract_title(md), "The Real Title")
+
+    def test_first_h1_only(self):
+        """Should return the first H1 found if multiple exist."""
+        md = "# First Title\n# Second Title"
+        self.assertEqual(extract_title(md), "First Title")
+
+    def test_ignores_other_levels(self):
+        """Should ignore H2 (##) or H3 (###) headers."""
+        md = "## Subtitle\n# Main Title"
+        self.assertEqual(extract_title(md), "Main Title")
+
+    def test_no_header_raises_exception(self):
+        """Should raise an Exception if no line starts with '# '."""
+        md = "Just some text\n## Only an H2"
+        with self.assertRaises(Exception) as cm:
+            extract_title(md)
+        self.assertEqual(str(cm.exception), "No Header")
+
+    def test_missing_space_fails(self):
+        """Markdown headers require a space after the #."""
+        md = "#TitleWithoutSpace"
+        with self.assertRaises(Exception):
+            extract_title(md)
 
 if __name__ == "__main__":
     unittest.main()
