@@ -1,4 +1,3 @@
-from rich import print
 from enum import Enum
 from node_type_html import HTMLNode, ParentNode, LeafNode
 from text_to_node import text_to_textnodes

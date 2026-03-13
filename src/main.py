@@ -1,6 +1,7 @@
 from node_type_text import TextNode, TextType
 import shutil, os
 from pathlib import Path
+from markdown_to_html import generate_page
 
 
 def reset_public_folder():
@@ -25,9 +26,20 @@ def copy_static_folder_to_public(dir: Path):
 
 def main():
     home_dir = Path.cwd()
+    source_base_path = Path('content')
+    destination_base_path = Path("public")  
     static = home_dir / "static"
     reset_public_folder()
     copy_static_folder_to_public(static)
+    generate_page("content/index.md", "template.html", "public/index.html")
+    generate_page("content/contact/index.md", "template.html", "public/contact/index.html")
+    generate_page("content/blog/glorfindel/index.md", "template.html", "public/blog/glorfindel/index.html")
+    generate_page("content/blog/tom/index.md", "template.html", "public/blog/tom/index.html")
+    generate_page("content/blog/majesty/index.md", "template.html", "public/blog/majesty/index.html")
+    
+    
+    
+    
 
 
 if __name__ == "__main__":
