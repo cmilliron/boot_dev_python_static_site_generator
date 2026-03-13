@@ -1227,5 +1227,34 @@ class TestExtractTitle(unittest.TestCase):
         with self.assertRaises(Exception):
             extract_title(md)
 
+class TestExtractTitle_1(unittest.TestCase):
+
+    def test_standard_header(self):
+        # Basic functional test
+        md = "# Hello World"
+        self.assertEqual(extract_title(md), "Hello World")
+
+    def test_header_with_multiple_lines(self):
+        # Ensure it finds the header among other text
+        md = "Some intro text\n# Actual Title\nMore text"
+        self.assertEqual(extract_title(md), "Actual Title")
+
+    def test_no_header_raises_exception(self):
+        # Verify the exception is raised when '#' is missing
+        md = "This is just a paragraph."
+        with self.assertRaisesRegex(Exception, "No Header"):
+            extract_title(md)
+
+    def test_wrong_header_level(self):
+        # Verify it ignores H2, H3, etc. (per your startswith("# ") logic)
+        md = "## Subheading"
+        with self.assertRaises(Exception):
+            extract_title(md)
+
+    def test_empty_string(self):
+        # Edge case: empty input
+        with self.assertRaises(Exception):
+            extract_title("")
+
 if __name__ == "__main__":
     unittest.main()
