@@ -9,7 +9,7 @@ def extract_title(markdown):
             return line[2:]
     raise Exception("No Header")
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, root_path):
 
     # TODO Print a message like "Generating page from from_path to dest_path using template_path".
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
@@ -33,6 +33,9 @@ def generate_page(from_path, template_path, dest_path):
     # TODO Replace the {{ Title }} and {{ Content }} placeholders in the template with the HTML and title you generated.
     page = template_content.replace("{{ Title }}", page_title)
     page = page.replace("{{ Content }}", html)
+    if root_path != "":
+        page = page.replace('href="/', f'href="/{root_path}/')
+        page = page.replace('src="/', f'src="/{root_path}/')
     # print(page)
 
     # TODO Write the new full HTML page to a file at dest_path. Be sure to create any necessary directories if they don't exist.
@@ -44,7 +47,7 @@ def generate_page(from_path, template_path, dest_path):
     with open(dest_file, "w") as file:
         file.write(page)
 
-def generate_pages_recursive(dir_path_content: Path, template_path, dest_dir_path: Path):
+def generate_pages_recursive(dir_path_content: Path, template_path, dest_dir_path: Path, root_path):
     print("-"*4 + "New Call" + "-"*4)
     print(dir_path_content)
     print(dest_dir_path)
@@ -55,11 +58,11 @@ def generate_pages_recursive(dir_path_content: Path, template_path, dest_dir_pat
         print("relative path: ",)
         if item.is_dir():
             # call on current folder
-            generate_pages_recursive(item, "template.html", dest_dir_path / relative_path)
+            generate_pages_recursive(item, "template.html", dest_dir_path / relative_path, root_path)
         else:   
-            generate_page(item, "template.html", dest_dir_path / relative_path.with_suffix(".html"))
+            generate_page(item, "template.html", dest_dir_path / relative_path.with_suffix(".html"), root_path)
 
 if __name__ == "__main__":
     content_path_test = Path('content')
     public_path_test = Path('public')
-    generate_pages_recursive(content_path_test, "template.html", public_path_test)
+    # generate_pages_recursive(content_path_test, "template.html", public_path_test)
