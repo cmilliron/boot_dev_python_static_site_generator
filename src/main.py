@@ -31,7 +31,7 @@ def main():
     add_on = ""
     if len(sys.argv) > 1:
         add_on = sys.argv[1]
-        destination_path = destination_path / add_on
+        # destination_path = destination_path / add_on
     # destination_base_path = root_path / add_on_path
     reset_public_folder(destination_path)
  
