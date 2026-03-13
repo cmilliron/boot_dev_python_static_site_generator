@@ -27,12 +27,12 @@ def generate_page(from_path, template_path, dest_path):
     # TODO Use your markdown_to_html_node function and .to_html() method to convert the markdown file to an HTML string.
     html = markdown_to_html_node(source_content).to_html()
 
-    # TODO Use the extract_title function to grab the title of the page.
+    # TODO Use the extract_title function to grab the title of the page.cle
     page_title = extract_title(source_content)
 
     # TODO Replace the {{ Title }} and {{ Content }} placeholders in the template with the HTML and title you generated.
     page = template_content.replace("{{ Title }}", page_title)
-    page = template_content.replace("{{ Content }}", html)
+    page = page.replace("{{ Content }}", html)
     # print(page)
 
     # TODO Write the new full HTML page to a file at dest_path. Be sure to create any necessary directories if they don't exist.
@@ -44,8 +44,22 @@ def generate_page(from_path, template_path, dest_path):
     with open(dest_file, "w") as file:
         file.write(page)
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
-    
+def generate_pages_recursive(dir_path_content: Path, template_path, dest_dir_path: Path):
+    print("-"*4 + "New Call" + "-"*4)
+    print(dir_path_content)
+    print(dest_dir_path)
+    print("*"*10)
+    for item in dir_path_content.iterdir():
+        print("current: ", item)
+        relative_path = item.relative_to(dir_path_content)
+        print("relative path: ",)
+        if item.is_dir():
+            # call on current folder
+            generate_pages_recursive(item, "template.html", dest_dir_path / relative_path)
+        else:   
+            generate_page(item, "template.html", dest_dir_path / relative_path.with_suffix(".html"))
 
 if __name__ == "__main__":
-    generate_page("content/index.md", "template.html", "public/test/test.html")
+    content_path_test = Path('content')
+    public_path_test = Path('public')
+    generate_pages_recursive(content_path_test, "template.html", public_path_test)
